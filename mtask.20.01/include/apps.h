@@ -19,4 +19,5 @@ int kill_main(int argc, char *argv[]);				// kill.c
 int ts_main(int argc, char *argv[]);				// ts.c
 int print_date();
 int set_date(int argc,char** argv);
+int calendar();
 #endif

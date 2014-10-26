@@ -8,6 +8,7 @@ typedef struct {
 	unsigned char day;
 	unsigned char month;
 	unsigned int year;
+	unsigned int century;
 }time_t;
 
  int get_update_in_progress_flag() ;
@@ -21,5 +22,6 @@ void read_rtc();
 int toBCD(int n);
 
 void set_time();
+int month_first_date();
 
 #endif

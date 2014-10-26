@@ -42,7 +42,8 @@ cmdtab[] =
 	{	"kill",			kill_main,			"tarea [status]"	},
 	{	"test",			test_main,			""					},
 	{	"date",			print_date,			""					},
-	{	"set_date",		set_date,			"[h] [m] [s] [d] [m] [a]"},
+	{	"set_date",		set_date,			"[hh] [mm] [ss] [dd] [mm] [aaaa]"},
+	{	"calendar",		calendar,			""					},
 	{															}
 };
 
