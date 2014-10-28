@@ -22,6 +22,8 @@ void read_rtc();
 
 int toBCD(int n);
 
+int fromBCD(int n);
+
 void set_time();
 
 int day_of_the_week();
