@@ -260,7 +260,7 @@ run_shell(void *arg)
 	while ( true )
 	{
 		mt_cons_clear();
-		cprintk(LIGHTCYAN, BLACK, "Bienvenido a MTask\n");
+		cprintk(GREEN, BLACK, "Bienvenido a MTask\n");
 		shell_main(1, argv);
 	}
 	return 0;

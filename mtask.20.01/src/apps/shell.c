@@ -110,7 +110,7 @@ shell_main(int argc, char **argv)
 		// Leer línea de comando eventualmente usando la historia
 		mt_cons_setattr(LIGHTGRAY, BLACK);
 		mt_cons_cursor(true);
-		cprintk(LIGHTCYAN, BLACK, "\rMT%u> ", info.consnum);
+		cprintk(GREEN, BLACK, "\rMT%u> ", info.consnum);
 		mt_cons_clreom();
 		hcur = -1;
 		*line = 0;
