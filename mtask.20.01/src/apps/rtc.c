@@ -68,7 +68,7 @@ void read_rtc() {
       }
 
       do {
-      	last_second =curr_time.second;
+      	last_second = curr_time.second;
       	last_minute = curr_time.minute;
       	last_hour = curr_time.hour;
       	last_day = curr_time.day;
@@ -90,12 +90,13 @@ void read_rtc() {
       // Se convierte a BCD en caso necesario
 
       if (!(registerB & 0x04)) {
-      	curr_time.second = (curr_time.second & 0x0F) + ((curr_time.second / 16) * 10);
-      	curr_time.minute = (curr_time.minute & 0x0F) + ((curr_time.minute / 16) * 10);
-      	curr_time.hour = ( (curr_time.hour & 0x0F) + (((curr_time.hour & 0x70) / 16) * 10) ) | (curr_time.hour & 0x80);
-      	curr_time.day = (curr_time.day & 0x0F) + ((curr_time.day / 16) * 10);
-      	curr_time.month = (curr_time.month & 0x0F) + ((curr_time.month / 16) * 10);
-      	curr_time.year = (curr_time.year & 0x0F) + ((curr_time.year / 16) * 10);
+      	curr_time.second = fromBCD(curr_time.second);
+      	curr_time.minute = fromBCD(curr_time.minute);
+      	curr_time.hour = fromBCD(curr_time.hour);
+      	curr_time.day = fromBCD(curr_time.day);
+      	curr_time.month = fromBCD(curr_time.month);
+      	curr_time.year = fromBCD(curr_time.year);
+
       }
 
       // Se convierte en formato de 12 horas a 24
@@ -135,7 +136,7 @@ void read_rtc() {
   		curr_time.minute = toBCD(atoi(argv[2]));
   		curr_time.second = toBCD(atoi(argv[3]));
   		curr_time.day = toBCD(atoi(argv[4]));
-  		curr_time.month =toBCD(atoi(argv[5]));
+  		curr_time.month = toBCD(atoi(argv[5]));
 
 	    // No esta implementado substr
   		cent[0] = argv[6][0];
@@ -157,6 +158,10 @@ void read_rtc() {
 
   int toBCD(int n) {
   	return ((n / 10) << 4)|(n% 10);
+  }
+
+  int fromBCD(int n) {
+  	return ((n & 0xF0) >> 4) * 10 + (n & 0x0F);
   }
 
   void set_time(){
@@ -205,87 +210,84 @@ void read_rtc() {
   		for( i = 0 ; i < 7 ; i++){
   			if(ctr <= mdays && (i >= m ||  j > 3) )
   				if(ctr == curr_time.day) {
-	  				cprintk(LIGHTRED, RED,"%2d ",ctr++);
+  					cprintk(LIGHTRED, RED,"%2d ",ctr++);
   				} else {
-	  				cprintk(BLACK, RED,"%2d ",ctr++);
+  					cprintk(BLACK, RED,"%2d ",ctr++);
   				}
-  			else
-  				cprintk(BLACK, RED,"   ");
+  				else
+  					cprintk(BLACK, RED,"   ");
+  			}
+  		} while(ctr <= mdays);
+
+  		return 0;
+  	}
+
+  	int day_of_the_week(){
+  		int h,q,k,j,m,y;
+
+  		y = curr_time.year + (curr_time.century-1)*100;
+  		m = curr_time.month;
+  		if(m == 1) {
+  			m = 13;
+  			y--;
   		}
-  	} while(ctr <= mdays);
 
-  	return 0;
-  }
+  		if (m == 2) {
+  			m = 14;
+  			y--;
+  		}
 
-  int day_of_the_week(){
-  	int h,q,k,j,m,y;
+  		q = curr_time.day;
+  		k = y % 100;
+  		j = y / 100;
+  		h = q + 13*(m+1)/5 + k + k/4 + j/4 + 5*j;
+  		h = h % 7;
 
-  	y = curr_time.year + (curr_time.century-1)*100;
-  	m = curr_time.month;
-  	if(m == 1) {
-  		m = 13;
-  		y--;
+  		if(h <= 1)
+  			return h + 5;
+  		else
+  			return h - 2;
+
+  		return -1;
   	}
 
-  	if (m == 2) {
-  		m = 14;
-  		y--;
+  	int first_day_month() {
+  		int aux = curr_time.day, ret;
+
+  		curr_time.day = 1;
+  		ret = day_of_the_week();
+  		curr_time.day = aux;
+
+  		return ret;
   	}
 
-  	q = curr_time.day;
-  	k = y % 100;
-  	j = y / 100;
-  	h = q + 13*(m+1)/5 + k + k/4 + j/4 + 5*j;
-  	h = h % 7;
+  	int days_in_month() {
+  		int val, aux;
 
-  	if(h <= 1)
-  		return h + 5;
-  	else
-  		return h - 2;
+  		switch(curr_time.month) {
+  			case 2:
+  			aux = curr_time.year + (curr_time.century-1)*100;
+  			if(is_leap_year(aux))
+  				val = 29;
+  			else
+  				val = 28;
+  			break;
 
-  	return -1;
-  }
-
-  int first_day_month() {
-  	int aux = curr_time.day, ret;
-
-  	curr_time.day = 1;
-  	ret = day_of_the_week();
-  	curr_time.day = aux;
-
-  	return ret;
-  }
-
-  int days_in_month() {
-  	int val, aux;
-
-  	switch(curr_time.month) {
-  		case 2:
-	  		aux = curr_time.year + (curr_time.century-1)*100;
-	  		if(is_leap_year(aux))
-	  			val = 29;
-	  		else
-	  			val = 28;
-	  		break;
-
-  		case 4:
-  		case 6:
-  		case 9:
-  		case 11:
+  			case 4:
+  			case 6:
+  			case 9:
+  			case 11:
   			val = 30;
   			break;
 
-  		default:
+  			default:
   			val = 31;
-  		break;
+  			break;
+  		}
+
+  		return val;
   	}
 
-  	return val;
-  }
-
-  int is_leap_year(int year) {
-  	return ( (year%4==0) && !(year%100==0) ) || (year%400==0);
-  }
 
   int cron(int argc,char** argv){
     if(argc<6){
@@ -350,3 +352,8 @@ void read_rtc() {
         return -1;
     return 0;
 }
+
+  	int is_leap_year(int year) {
+  		return ( (year%4==0) && !(year%100==0) ) || (year%400==0);
+  	}
+
