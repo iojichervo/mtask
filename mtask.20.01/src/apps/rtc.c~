@@ -3,8 +3,6 @@
 #include <kernel.h>
 #include <apps.h>
 
-static listADT alarms = NULL;
-static int alarmCount = 0;
 time_t curr_time;
 alarm * first_alarm;
 int first = 1;
@@ -289,7 +287,7 @@ void read_rtc() {
 
   int cron(int argc,char** argv){
     if(argc<6){
-      printk("los parametros necesarios  deben ser mayores  a 5.\n");
+      printk("los parametros necesarios  deben ser mayores o iguales a 6");
     }
     time_t cron_time;
 
@@ -303,6 +301,7 @@ void read_rtc() {
       a_prepare.id = alarmCount++;
       a_prepare.name = argv[6]; //nombre de la alarma es el nombre del comando que disparara.
       a_prepare.repeat = 0;
+
       if(argc == 8) 
       { 
        a_prepare.cmd_path = Malloc(2 * sizeof(char *));
@@ -310,14 +309,14 @@ void read_rtc() {
       strcpy(a_prepare.cmd_path[0],argv[6]);
       a_prepare.cmd_path[1] = Malloc(strlen(argv[7] + 1));
       strcpy(a_prepare.cmd_path[1], argv[7]);
-      a_prepare.cmd_variables = 2;
+      a.cmd_variables = 2;
       }
      else if (argc == 7) 
      { 
          a_prepare.cmd_path= Malloc(1 * sizeof(char *));
          a_prepare.cmd_path[0] = Malloc(strlen(argv[6] + 1));
          strcpy( a_prepare.cmd_path[0], argv[6]);
-         a_prepare.cmd_variables= 1;
+         a.cmd_variables= 1;
       }
       else {
                cprintk(LIGHTRED, BLACK, "Comando invalido.\n");
@@ -325,28 +324,10 @@ void read_rtc() {
             }
 
        a_prepare.alarm_time=cron_time;
-       Insert(alarms,&a_prepare);
+       insert_alarm(alarms,&a_prepare);
 
       return 0;
 
 
 
   }
-
-  int compAlarm(alarm *a1, alarm *a2) {
-    int difference;
-    long a1secs = toBCD((a1->alarm_time).day) * 86400 + 
-        toBCD((a1->alarm_time).hour) * 3600 + 
-        toBCD((a1->alarm_time).minute) * 60 + 
-        toBCD((a1->alarm_time).second);
-    long a2secs = toBCD((a2->alarm_time).day) * 86400 +
-        toBCD((a2->alarm_time).hour) * 3600 +
-        toBCD((a2->alarm_time).minute) * 60 +
-        toBCD((a2->alarm_time).second);
-    difference = a1secs - a2secs;
-    if(difference> 0)
-        return 1;
-    if(difference < 0)
-        return -1;
-    return 0;
-}

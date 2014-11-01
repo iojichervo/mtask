@@ -12,6 +12,17 @@ typedef struct {
 	unsigned char week_day;
 } time_t;
 
+
+typedef struct {
+	int id;
+	char * name;
+    char * * cmd_path;
+    int cmd_variables ;
+	time_t alarm_time;
+    int repeat;
+    int secs;
+} alarm;
+
 int get_update_in_progress_flag() ;
 
 unsigned char get_RTC_register(int reg);
@@ -33,5 +44,7 @@ int first_day_month();
 int days_in_month();
 
 int is_leap_year(int year);
+
+int compAlarm(alarm *a1, alarm *a2);
 
 #endif

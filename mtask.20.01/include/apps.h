@@ -20,4 +20,5 @@ int ts_main(int argc, char *argv[]);				// ts.c
 int print_date();
 int set_date(int argc,char** argv);
 int calendar();
+int cron(int argc,char** argv);
 #endif
