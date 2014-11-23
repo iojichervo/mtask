@@ -204,6 +204,7 @@ void mt_cons_bs(void);
 void mt_cons_setfocus(unsigned consnum);
 void mt_cons_setcurrent(unsigned consnum);
 unsigned mt_cons_set0(void);
+unsigned mt_cons_current(void);
 
 /* input.c */ 
 

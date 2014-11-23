@@ -44,9 +44,10 @@ cmdtab[] =
 	{	"date",			print_date,			""					},
 	{	"set_date",		set_date,			"[hh] [mm] [ss] [dd] [mm] [aaaa]"},
 	{	"calendar",		calendar,			""					},
-	{	"cron",			cron,				"[hh] [mm] [ss] [dd] [cmd]"	},
+	{	"cron",			cron,				"[dd] [hh] [mm] [ss] [app]"},
+	{	"periodiccron",	periodiccron,		"[s] [app]"			},
+	{	"timer",		timer,				"[ms] [app]"		},
 	{															}
-
 };
 
 static int

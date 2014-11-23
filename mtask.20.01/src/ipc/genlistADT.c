@@ -6,7 +6,7 @@
 /* Version Iterativa de listas con header */
 
 #include "kernel.h"
-#include "../include/list_ADT.h"
+#include "genlistADT.h"
 
 
 struct listCDT
@@ -14,7 +14,7 @@ struct listCDT
 	int (*fComp) (void *, void *);	/* funcion de comparacion */
 	struct listNode * first;	/* puntero al primer nodo de la lista */
 	struct listNode * actual;	/* puntero al actual, para iterar */
-        unsigned int bytes;             /* cantidad de bytes que ocupa cada elemento */
+    unsigned int bytes;             /* cantidad de bytes que ocupa cada elemento */
 	unsigned int size;		/* cantidad de nodos */
 };
 
@@ -23,6 +23,13 @@ typedef struct listNode
 	listElementT data;
 	struct listNode * next;
 }listNode;
+
+
+// static void
+// Error(const char* s)
+// {
+// 	printk("%s", s);
+// }
 
 
 listADT
@@ -36,6 +43,7 @@ NewList( unsigned int bytes, int (*fComp) (void *, void *) )
 	l->actual = NULL;
         l->bytes  = bytes;
 	l->size = 0;
+	return l;
 }
 
 

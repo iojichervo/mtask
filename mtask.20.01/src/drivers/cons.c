@@ -397,3 +397,9 @@ mt_cons_set0(void)
 	set_cons();
 	return prev;
 }
+
+unsigned
+mt_cons_current(void)
+{
+	return current;
+}

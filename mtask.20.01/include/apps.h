@@ -21,4 +21,6 @@ int print_date();
 int set_date(int argc,char** argv);
 int calendar();
 int cron(int argc,char** argv);
+int periodiccron(int argc,char** argv);
+int timer(int argc,char** argv);
 #endif
